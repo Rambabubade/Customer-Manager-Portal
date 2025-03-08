@@ -85,35 +85,56 @@ const CmForm = () => {
                   {errors.experience}
                 </Typography>
               )}
-              <TextField
-                fullWidth
-                variant="filled"
-                multiline
-                rows={1}
-                label="Subject"
-                InputLabelProps={{ style: { fontSize: "1.2rem" } }}
-                name="experienceDetails"
-                value={values.experienceDetails}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!touched.experienceDetails && !!errors.experienceDetails}
-                helperText={touched.experienceDetails && errors.experienceDetails}
-              />
-              {/* Experience Details */}
-              <TextField
-                fullWidth
-                variant="filled"
-                multiline
-                rows={4}
-                label="Details of your experience"
-                InputLabelProps={{ style: { fontSize: "1.2rem" } }}
-                name="experienceDetails"
-                value={values.experienceDetails}
-                onChange={handleChange}
-                onBlur={handleBlur}
-                error={!!touched.experienceDetails && !!errors.experienceDetails}
-                helperText={touched.experienceDetails && errors.experienceDetails}
-              />
+<TextField
+  fullWidth
+  variant="filled"
+  multiline
+  rows={1}
+  label="Subject"
+  sx={{
+    "& .MuiFilledInput-root": {
+      border: `2px solid ${theme.palette.mode === "dark" ? "#FFF" : "#000"}`,
+      borderRadius: "5px",
+      backgroundColor: "transparent", // Maintain theme adaptability
+    },
+    "& .MuiInputLabel-root": {
+      fontSize: "1.2rem",
+      color: theme.palette.mode === "dark" ? "#FFF" : "#000",
+    },
+  }}
+  name="experienceDetails"
+  value={values.experienceDetails}
+  onChange={handleChange}
+  onBlur={handleBlur}
+  error={!!touched.experienceDetails && !!errors.experienceDetails}
+  helperText={touched.experienceDetails && errors.experienceDetails}
+/>
+
+<TextField
+  fullWidth
+  variant="filled"
+  multiline
+  rows={4}
+  label="Details of your experience"
+  sx={{
+    "& .MuiFilledInput-root": {
+      border: `2px solid ${theme.palette.mode === "dark" ? "#FFF" : "#000"}`,
+      borderRadius: "5px",
+      backgroundColor: "transparent",
+    },
+    "& .MuiInputLabel-root": {
+      fontSize: "1.2rem",
+      color: theme.palette.mode === "dark" ? "#FFF" : "#000",
+    },
+  }}
+  name="experienceDetails"
+  value={values.experienceDetails}
+  onChange={handleChange}
+  onBlur={handleBlur}
+  error={!!touched.experienceDetails && !!errors.experienceDetails}
+  helperText={touched.experienceDetails && errors.experienceDetails}
+/>
+
 
 
               {/* Impact Selection Heading */}
