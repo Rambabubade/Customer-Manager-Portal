@@ -61,22 +61,23 @@ const CmForm = () => {
               <Box display="flex" flexWrap="wrap" gap="10px">
                 {experienceOptions.map((option) => (
                   <Button
-  key={option.value}
-  variant={values.experience === option.value ? "contained" : "outlined"}
-  color="primary"
-  onClick={() => setFieldValue("experience", option.value)}
-  sx={{
-    textTransform: "none", // Ensures text remains in its original case
-    fontSize: isMobile ? "1rem" : "1.2rem",
-    width: isMobile ? "100%" : "auto",
-    border: "none",
-    boxShadow: "3px 3px 6px rgba(187, 185, 185, 0.2)",
-    transition: "0.3s",
-    "&:hover": { boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
-  }}
->
-  {option.label}
-</Button>
+                  key={option.value}
+                  variant={values.experience === option.value ? "contained" : "outlined"}
+                  color="primary"
+                  onClick={() => setFieldValue("experience", option.value)}
+                  sx={{
+                    textTransform: "none", // Ensures text remains in its original case
+                    fontSize: isMobile ? "1rem" : "1.2rem",
+                    width: isMobile ? "100%" : "auto",
+                    border: "none",
+                    color: colors.grey[1000],
+                    boxShadow: "3px 3px 6px rgba(187, 185, 185, 0.2)",
+                    transition: "0.3s",
+                    "&:hover": { boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
+                  }}
+                >
+                  {option.label}
+                </Button>
                 ))}
               </Box>
               {touched.experience && errors.experience && (
@@ -130,6 +131,7 @@ const CmForm = () => {
                 fontSize: isMobile ? "1rem" : "1.2rem",
                 width: isMobile ? "100%" : "auto",
                 border: "none",
+                color: colors.grey[1000],
                 boxShadow: "3px 3px 6px rgba(187, 185, 185, 0.2)",
                 transition: "0.3s",
                 textTransform: "none", // 👈 Prevents uppercase text

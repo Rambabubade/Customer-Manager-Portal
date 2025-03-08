@@ -125,11 +125,11 @@ const Dashboard = () => {
                 <StatBox
                   title={item.title}
                   subtitle={item.subtitle}
-                  color={colors.blueAccent[500]}
+                  color='#3e4396'
                   progress={item.progress}
                   icon={React.cloneElement(item.icon, {
                     fontSize: "large",
-                    sx: { color: colors.blueAccent[500] },
+                    sx: { color: '#3e4396' },
                   })}
                 />
               </Box>
