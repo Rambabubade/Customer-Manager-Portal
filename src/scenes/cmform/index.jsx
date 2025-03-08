@@ -1,21 +1,21 @@
-import { Box, Button, TextField, Typography, useMediaQuery,useTheme } from "@mui/material";
+import { Box, Button, TextField, Typography, useMediaQuery, useTheme } from "@mui/material";
 import { Formik } from "formik";
 import * as yup from "yup";
 import Header from "../../components/Header";
 import { useState } from "react";
 import { tokens } from "../../theme";
-// Define schema and initial values before the component
+
 const experienceOptions = [
-  { value: "Extremely happy", label: "😊 Extremely Happy" },
-  { value: "Happy", label: "🙂 Happy" },
-  { value: "Frustrated", label: "😠 Frustrated" },
-  { value: "Extremely frustrated", label: "😡 Extremely Frustrated" },
+  { value: "Extremely happy", label: "😊 Extremely Happy", color: "#8BC34A" },
+  { value: "Happy", label: "🙂 Happy", color: "#4CAF50" },
+  { value: "Frustrated", label: "😠 Frustrated", color: "#FF9800" },
+  { value: "Extremely frustrated", label: "😡 Extremely Frustrated", color: "#F44336" },
 ];
 
 const impactOptions = [
-  { value: "Revenue impact", label: "💰 Revenue Impact" },
-  { value: "Business show stopper", label: "🚧 Business Show Stopper" },
-  { value: "Customer experience", label: "👥 Customer Experience" },
+  { value: "Revenue impact", label: "💰 Revenue Impact", color: "#1E88E5" },
+  { value: "Business show stopper", label: "🚧 Business Show Stopper", color: "#9C27B0" },
+  { value: "Customer experience", label: "👥 Customer Experience", color: "#00ACC1" },
 ];
 
 const checkoutSchema = yup.object().shape({
@@ -33,7 +33,7 @@ const initialValues = {
 
 const CmForm = () => {
   const theme = useTheme();
-  const colors = tokens(theme.palette.mode); 
+  const colors = tokens(theme.palette.mode);
   const [status] = useState("Open");
   const isMobile = useMediaQuery("(max-width:600px)");
 
@@ -54,30 +54,28 @@ const CmForm = () => {
         {({ values, errors, touched, handleBlur, handleChange, handleSubmit, setFieldValue }) => (
           <form onSubmit={handleSubmit}>
             <Box display="flex" flexDirection="column" gap="20px">
-              {/* Experience Selection Heading */}
               <Typography variant="h6" fontWeight="bold" fontSize={20}>
                 How was your experience?
               </Typography>
               <Box display="flex" flexWrap="wrap" gap="10px">
                 {experienceOptions.map((option) => (
                   <Button
-                  key={option.value}
-                  variant={values.experience === option.value ? "contained" : "outlined"}
-                  color="primary"
-                  onClick={() => setFieldValue("experience", option.value)}
-                  sx={{
-                    textTransform: "none", // Ensures text remains in its original case
-                    fontSize: isMobile ? "1rem" : "1.2rem",
-                    width: isMobile ? "100%" : "auto",
-                    border: "none",
-                    color: colors.grey[1000],
-                    boxShadow: "3px 3px 6px rgba(187, 185, 185, 0.2)",
-                    transition: "0.3s",
-                    "&:hover": { boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
-                  }}
-                >
-                  {option.label}
-                </Button>
+                    key={option.value}
+                    variant={values.experience === option.value ? "contained" : "outlined"}
+                    onClick={() => setFieldValue("experience", option.value)}
+                    sx={{
+                      textTransform: "none",
+                      fontSize: isMobile ? "1rem" : "1.2rem",
+                      width: isMobile ? "100%" : "auto",
+                      backgroundColor: values.experience === option.value ? option.color : "transparent",
+                      color: values.experience === option.value ? "white" : colors.grey[1000],
+                      boxShadow: "3px 3px 6px rgba(187, 185, 185, 0.2)",
+                      transition: "0.3s",
+                      "&:hover": { backgroundColor: option.color, color: "white" },
+                    }}
+                  >
+                    {option.label}
+                  </Button>
                 ))}
               </Box>
               {touched.experience && errors.experience && (
@@ -85,7 +83,37 @@ const CmForm = () => {
                   {errors.experience}
                 </Typography>
               )}
-<TextField
+
+              <Typography variant="h6" fontWeight="bold" fontSize={20}>
+                Impact
+              </Typography>
+              <Box display="flex" flexWrap="wrap" gap="10px">
+                {impactOptions.map((option) => (
+                  <Button
+                    key={option.value}
+                    variant={values.impact === option.value ? "contained" : "outlined"}
+                    onClick={() => setFieldValue("impact", option.value)}
+                    sx={{
+                      fontSize: isMobile ? "1rem" : "1.2rem",
+                      width: isMobile ? "100%" : "auto",
+                      backgroundColor: values.impact === option.value ? option.color : "transparent",
+                      color: values.impact === option.value ? "white" : colors.grey[1000],
+                      boxShadow: "3px 3px 6px rgba(187, 185, 185, 0.2)",
+                      transition: "0.3s",
+                      textTransform: "none",
+                      "&:hover": { backgroundColor: option.color, color: "white" },
+                    }}
+                  >
+                    {option.label}
+                  </Button>
+                ))}
+              </Box>
+              {touched.impact && errors.impact && (
+                <Typography color="error" fontSize="0.9rem">
+                  {errors.impact}
+                </Typography>
+              )}
+              <TextField
   fullWidth
   variant="filled"
   multiline
@@ -135,99 +163,9 @@ const CmForm = () => {
   helperText={touched.experienceDetails && errors.experienceDetails}
 />
 
-
-
-              {/* Impact Selection Heading */}
-              <Typography variant="h6" fontWeight="bold" fontSize={20}>
-                Impact
-              </Typography>
-              <Box display="flex" flexWrap="wrap" gap="10px">
-                {impactOptions.map((option) => (
-              <Button
-              key={option.value}
-              variant={values.impact === option.value ? "contained" : "outlined"}
-              color="primary"
-              onClick={() => setFieldValue("impact", option.value)}
-              sx={{
-                fontSize: isMobile ? "1rem" : "1.2rem",
-                width: isMobile ? "100%" : "auto",
-                border: "none",
-                color: colors.grey[1000],
-                boxShadow: "3px 3px 6px rgba(187, 185, 185, 0.2)",
-                transition: "0.3s",
-                textTransform: "none", // 👈 Prevents uppercase text
-                "&:hover": { boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)" },
-              }}
-            >
-              {option.label}
-            </Button>
-                ))}
-              </Box>
-              {touched.impact && errors.impact && (
-                <Typography color="error" fontSize="0.9rem">
-                  {errors.impact}
-                </Typography>
-              )}
-
-              {/* Attachments */}
-              <Box
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  backgroundColor: "#f0f0f0",
-                  padding: "10px",
-                  borderRadius: "5px",
-                  width: isMobile ? "100%" : "50%",
-                  position: "relative",
-                }}
-              >
-                <input
-                  type="file"
-                  name="attachments"
-                  multiple
-                  id="fileUpload"
-                  style={{ display: "none" }}
-                  onChange={(event) => setFieldValue("attachments", event.currentTarget.files)}
-                />
-                <label
-                  htmlFor="fileUpload"
-                  style={{
-                    display: "flex",
-                    alignItems: "center",
-                    justifyContent: "center",
-                    backgroundColor: colors.blueAccent[700],
-                    color: "white",
-                    padding: "10px 15px",
-                    borderRadius: "5px",
-                    cursor: "pointer",
-                    fontWeight: "bold",
-                    width: isMobile ? "100%" : "auto",
-                    boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
-                    transition: "0.3s",
-                    "&:hover": { backgroundColor: "#5a0ca1" },
-                  }}
-                >
-                  📤 Choose a file...
-                </label>
-                <Typography
-                  sx={{
-                    marginLeft: "10px",
-                    fontSize: "1rem",
-                    color: "#555",
-                    whiteSpace: "nowrap",
-                    overflow: "hidden",
-                    textOverflow: "ellipsis",
-                  }}
-                >
-                  {values.attachments.length > 0 ? values.attachments[0].name : "No file chosen"}
-                </Typography>
-              </Box>
-
-              {/* Submit Button */}
               <Box display="flex" justifyContent="flex-end">
                 <Button
                   type="submit"
-                  // color="secondary"
                   variant="contained"
                   sx={{
                     padding: "10px",
