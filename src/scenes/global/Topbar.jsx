@@ -43,8 +43,8 @@ const Topbar = () => {
         <IconButton>
           <SettingsOutlinedIcon />
         </IconButton> */}
-        <IconButton>
-          <PersonOutlinedIcon onClick={() => navigate("/profile")} />
+        <IconButton onClick={() => navigate("/profile")}>
+          <PersonOutlinedIcon />
         </IconButton>
       </Box>
     </Box>
