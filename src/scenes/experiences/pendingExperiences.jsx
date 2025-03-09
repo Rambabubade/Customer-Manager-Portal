@@ -16,7 +16,8 @@ import {
 } from "@mui/material";
 import {  Add } from "@mui/icons-material";
 import { tokens } from "../../theme";
-import { Link } from "react-router-dom";
+// import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 // Sample Ticket Data
 const sampleTickets = [
   { key: "#525464", subject: "Quo cupiditate quis dolores.", priority: "Less Urgent", status: "Pending", date: "3 hours ago", updated: "3 hours ago" },
@@ -44,6 +45,7 @@ const getStatusColor = (status) => {
 };
 
 const PendingExperiences = () => {
+        const navigate = useNavigate();
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const [search, setSearch] = useState("");
@@ -104,21 +106,23 @@ const PendingExperiences = () => {
           sx={{ fontSize: "1rem" }}
         />
         <Button
-          variant="contained"
-          startIcon={<Add />}
-          sx={{
-            backgroundColor: colors.blueAccent[700],
-            color: colors.grey[100],
-            fontSize: "1rem",
-            fontWeight: "bold",
-            padding: "7px 15px",
-            marginTop: "10px",
-          }}
-          component={Link}  // Use Link as the component
-          to="/crmform"         // Set the route properly
-        >
-          New Ticket
-        </Button>
+            variant="contained"
+            
+            startIcon={<Add />}
+            sx={{
+              backgroundColor: colors.blueAccent[700],
+              // color: colors.grey[100],
+              color: '#fff',
+              fontSize: "1rem",
+              fontWeight: "bold",
+              padding: "7px 15px",
+              marginTop: "10px",
+            }}
+  
+            onClick={() => navigate("/cmform")}
+          >
+            Add New Experience
+          </Button>
       </Box>
 
       {/* Filters */}

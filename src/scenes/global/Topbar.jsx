@@ -7,13 +7,13 @@ import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
 import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
 import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import { useNavigate } from "react-router-dom";
 // import SearchIcon from "@mui/icons-material/Search";
-
 const Topbar = () => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
   const colorMode = useContext(ColorModeContext);
-
+  const navigate = useNavigate();
   return (
     <Box display="flex" justifyContent="space-between" p={2}>
       {/* SEARCH BAR */}
@@ -37,14 +37,14 @@ const Topbar = () => {
             <LightModeOutlinedIcon />
           )}
         </IconButton>
-        <IconButton>
+        {/* <IconButton>
           <NotificationsOutlinedIcon />
         </IconButton>
         <IconButton>
           <SettingsOutlinedIcon />
-        </IconButton>
+        </IconButton> */}
         <IconButton>
-          <PersonOutlinedIcon />
+          <PersonOutlinedIcon onClick={() => navigate("/profile")} />
         </IconButton>
       </Box>
     </Box>
