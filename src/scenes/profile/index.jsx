@@ -14,6 +14,7 @@ const Profile = () => {
     email: "john.doe@example.com",
     phone: "+123 456 7890",
   });
+  setProfileData({ name: "John Doe" });
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
