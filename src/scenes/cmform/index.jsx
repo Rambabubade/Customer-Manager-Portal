@@ -239,72 +239,57 @@ const CmForm = () => {
                 ))}
               </Box>
 
-              <Box>
-                <Typography variant="h6" fontWeight="bold" fontSize={20}>
-                  📩 Upload Attachment
-                </Typography>
-
-                {/* Hidden File Input */}
+              <Box
+                sx={{
+                  display: "flex",
+                  alignItems: "center",
+                  backgroundColor: "#f0f0f0",
+                  padding: "10px",
+                  borderRadius: "5px",
+                  width: isMobile ? "100%" : "50%",
+                  position: "relative",
+                }}
+              >
                 <input
                   type="file"
-                  accept="image/*, .pdf, .doc, .docx"
+                  name="attachments"
+                  multiple
+                  id="fileUpload"
                   style={{ display: "none" }}
-                  id="file-input"
-                  onChange={(event) => {
-                    const file = event.target.files[0];
-                    setFieldValue("attachments", file);
-                  }}
+                  onChange={(event) => setFieldValue("attachments", event.currentTarget.files)}
                 />
-
-                {/* Styled Button as Letter-Style Input */}
-                <label htmlFor="file-input">
-                  <Button
-                    variant="contained"
-                    component="span"
-                    sx={{
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      gap: "8px",
-                      backgroundColor: colors.blueAccent[600],
-                      color: "#FFF",
-                      padding: "10px 20px",
-                      fontSize: "1.2rem",
-                      fontWeight: "bold",
-                      borderRadius: "8px",
-                      boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
-                      textTransform: "none",
-                      transition: "0.3s",
-                      "&:hover": {
-                        backgroundColor: colors.blueAccent[500],
-                        boxShadow: "5px 5px 10px rgba(0, 0, 0, 0.3)",
-                      },
-                    }}
-                  >
-                    ✉️ Choose File
-                  </Button>
+                <label
+                  htmlFor="fileUpload"
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    backgroundColor: "#192032",
+                    color: "white",
+                    padding: "10px 15px",
+                    borderRadius: "5px",
+                    cursor: "pointer",
+                    fontWeight: "bold",
+                    width: isMobile ? "100%" : "auto",
+                    boxShadow: "3px 3px 6px rgba(0, 0, 0, 0.2)",
+                    transition: "0.3s",
+                    "&:hover": { backgroundColor: "#5a0ca1" },
+                  }}
+                >
+                  📤 Choose a file...
                 </label>
-
-                {/* Display Selected File Name with Letter Icon */}
-                {values.attachments && (
-                  <Typography
-                    fontSize="1rem"
-                    color={theme.palette.mode === "dark" ? "#fff" : "#000"}
-                    mt={1}
-                    display="flex"
-                    alignItems="center"
-                    gap="8px"
-                  >
-                    📄 Selected File: <strong >{values.attachments.name}</strong>
-                  </Typography>
-                )}
-
-                {/* Error Message */}
-                {touched.attachments && errors.attachments && (
-                  <Typography color="error" fontSize="0.9rem">
-                    {errors.attachments}
-                  </Typography>
-                )}
+                <Typography
+                  sx={{
+                    marginLeft: "10px",
+                    fontSize: "1rem",
+                    color: "#555",
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                  }}
+                >
+                  {values.attachments.length > 0 ? values.attachments[0].name : "No file chosen"}
+                </Typography>
               </Box>
 
 
