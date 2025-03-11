@@ -1,52 +1,105 @@
-import { Box, IconButton, useTheme } from "@mui/material";
-import { useContext } from "react";
+import { Box, IconButton, useTheme, Typography, useMediaQuery, Modal } from "@mui/material";
+import { useState, useContext, useEffect } from "react";
 import { ColorModeContext, tokens } from "../../theme";
+import { Link, useLocation } from "react-router-dom";
 import InputBase from "@mui/material/InputBase";
 import LightModeOutlinedIcon from "@mui/icons-material/LightModeOutlined";
 import DarkModeOutlinedIcon from "@mui/icons-material/DarkModeOutlined";
-// import NotificationsOutlinedIcon from "@mui/icons-material/NotificationsOutlined";
-// import SettingsOutlinedIcon from "@mui/icons-material/SettingsOutlined";
 import PersonOutlinedIcon from "@mui/icons-material/PersonOutlined";
+import MenuOutlinedIcon from "@mui/icons-material/MenuOutlined";
+import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
+import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
+import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
+import logoLight from "./logo.png";
+import logoDark from "./logo2.png";
 import { useNavigate } from "react-router-dom";
-// import SearchIcon from "@mui/icons-material/Search";
-const Topbar = () => {
+
+const MenuItemComponent = ({ title, to, icon, selected, setSelected, closeDrawer }) => {
   const theme = useTheme();
   const colors = tokens(theme.palette.mode);
-  const colorMode = useContext(ColorModeContext);
-  const navigate = useNavigate();
-  return (
-    <Box display="flex" justifyContent="space-between" p={2}>
-      {/* SEARCH BAR */}
-      <Box
-  display="hidden" // This will hide the entire component
-  backgroundColor={colors.primary[400]}
-  borderRadius="3px"
->
-  <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" type="hidden" />
-  {/* <IconButton type="button" sx={{ p: 1 }}> */}
-    {/* <SearchIcon display="none" /> */}
-  {/* </IconButton> */}
-</Box>
 
-      {/* ICONS */}
+  const isActive = selected === to; // Check if the item is active
+
+  return (
+    <Box
+      display="flex"
+      alignItems="center"
+      sx={{
+        padding: "12px 16px",
+        cursor: "pointer",
+        color: isActive ? "#fff" : colors.grey[100], // White color for active item
+        backgroundColor: isActive ? colors.blueAccent[700] : "inherit",
+        "&:hover": { backgroundColor: colors.grey[800] },
+      }}
+      onClick={() => {
+        setSelected(to);
+        localStorage.setItem("selectedSidebarItem", to);
+        closeDrawer(); // Close modal on selection
+      }}
+    >
+      <Box sx={{ color: isActive ? "#fff" : "inherit" }}> {/* Ensures icon color changes */}
+        {icon}
+      </Box>
+      <Typography sx={{ marginLeft: 2 }}>
+        <Link to={to} style={{ textDecoration: "none", color: isActive ? "#fff" : "inherit" }}>{title}</Link>
+      </Typography>
+    </Box>
+  );
+};
+
+
+const Topbar = () => {
+  const theme = useTheme();
+  const colorMode = useContext(ColorModeContext);
+  const colors = tokens(theme.palette.mode);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const isMobile = useMediaQuery("(max-width: 900px)");
+  const location = useLocation();
+  const [selected, setSelected] = useState(location.pathname);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const storedItem = localStorage.getItem("selectedSidebarItem");
+    if (storedItem) {
+      setSelected(storedItem);
+    }
+  }, [location.pathname]); // Sync when URL changes
+
+  const logoSrc = theme.palette.mode === "dark" ? logoDark : logoLight;
+
+  return (
+    <Box display="flex" justifyContent="space-between" p={2} alignItems="center" backgroundColor={colors.primary[400]} sx={{ marginLeft: "20px" }}>
+      {isMobile ? (
+        <Box sx={{ width: "150px", height: "50px" }}>
+          <img src={logoSrc} alt="logo" style={{ width: "100%", height: "100%", objectFit: "contain" }} />
+        </Box>
+      ) : (
+        <Box backgroundColor={colors.primary[400]} borderRadius="3px">
+          <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" type="hidden" />
+        </Box>
+      )}
+
       <Box display="flex">
         <IconButton onClick={colorMode.toggleColorMode}>
-          {theme.palette.mode === "dark" ? (
-            <DarkModeOutlinedIcon />
-          ) : (
-            <LightModeOutlinedIcon />
-          )}
-        </IconButton>
-        {/* <IconButton>
-          <NotificationsOutlinedIcon />
+          {theme.palette.mode === "dark" ? <DarkModeOutlinedIcon /> : <LightModeOutlinedIcon />}
         </IconButton>
         <IconButton>
-          <SettingsOutlinedIcon />
-        </IconButton> */}
-        <IconButton onClick={() => navigate("/profile")}>
-          <PersonOutlinedIcon />
+          <PersonOutlinedIcon onClick = {() => navigate('profile')} />
         </IconButton>
+        {isMobile && (
+          <IconButton onClick={() => setIsModalOpen(true)}>
+            <MenuOutlinedIcon />
+          </IconButton>
+        )}
       </Box>
+
+      <Modal open={isModalOpen} onClose={() => setIsModalOpen(false)}>
+        <Box width="250px" sx={{ background: colors.primary[400], height: "100vh", position: "absolute", left: 0, top: 0, padding: "20px" }}>
+          <MenuItemComponent title="Dashboard" to="/" icon={<HomeOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+          <MenuItemComponent title="Experience" to="/allExperiences" icon={<WorkOutlineOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+          <MenuItemComponent title="Logout" to="/logout" icon={<LogoutOutlinedIcon />} selected={selected} setSelected={setSelected} closeDrawer={() => setIsModalOpen(false)} />
+        </Box>
+      </Modal>
     </Box>
   );
 };
