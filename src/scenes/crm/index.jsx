@@ -1,81 +1,113 @@
-import React from "react";
-import { FaFileExport, FaFileImport, FaPlus } from "react-icons/fa";
+import { Box, IconButton, Button, InputBase } from "@mui/material";
+import { DataGrid, GridToolbar } from "@mui/x-data-grid";
+import { tokens } from "../../theme";
 import Header from "../../components/Header";
+import { useTheme } from "@mui/material";
+import { useNavigate } from "react-router-dom";
+import SearchIcon from "@mui/icons-material/Search";
 
+const mockDataContacts = [
+  { id: 1, key: "#525464", subject: "Quo cupiditate quis dolores.", priority: "Urgent", status: "Pending", date: "3 hours ago", updated: "3 hours ago" },
+  { id: 2, key: "#466763", subject: "Et consequatur voluptatem et dolor modi.", priority: "Less Urgent", status: "Waiting for confirmation", date: "3 hours ago", updated: "3 hours ago" },
+  { id: 3, key: "#470049", subject: "Dolores est molestias beatae temporibus aspernatur delectus adipisci.", priority: "Urgent", status: "Processing", date: "3 hours ago", updated: "3 hours ago" },
+  { id: 4, key: "#606794", subject: "Fuga commodi aut rerum sed modi.", priority: "Generally Urgent", status: "Resolved", date: "3 hours ago", updated: "3 hours ago" },
+  { id: 5, key: "#525464", subject: "Quo cupiditate quis dolores.", priority: "Very Urgent", status: "Pending", date: "3 hours ago", updated: "3 hours ago" },
+  { id: 6, key: "#466763", subject: "Et consequatur voluptatem et dolor modi.", priority: "Urgent", status: "Waiting for confirmation", date: "3 hours ago", updated: "3 hours ago" },
+  { id: 7, key: "#470049", subject: "Dolores est molestias beatae temporibus aspernatur delectus adipisci.", priority: "Urgent", status: "Processing", date: "3 hours ago", updated: "3 hours ago" },
+  { id: 8, key: "#606794", subject: "Fuga commodi aut rerum sed modi.", priority: "Generally Urgent", status: "Resolved", date: "3 hours ago", updated: "3 hours ago" },
+];
 
-// const ticketsData = [
-//   { key: "#525464", subject: "Quo cupiditate quis dolores.", priority: "Less Urgent", status: "Pending", date: "3 hours ago", updated: "3 hours ago" },
-//   { key: "#466763", subject: "Et consequatur voluptatem et dolor modi.", priority: "Less Urgent", status: "Waiting for confirmation", date: "3 hours ago", updated: "3 hours ago" },
-//   { key: "#470049", subject: "Dolores est molestias beatae temporibus aspernatur delectus adipisci.", priority: "Generally", status: "Processing", date: "3 hours ago", updated: "3 hours ago" },
-//   { key: "#606794", subject: "Fuga commodi aut rerum sed modi.", priority: "Very Urgent", status: "Pending", date: "3 hours ago", updated: "3 hours ago" },
-//   { key: "#519760", subject: "Quibusdam quia velit voluptatem rerum.", priority: "Generally", status: "Completed", date: "3 hours ago", updated: "3 hours ago" },
-// ];
+const Crm = () => {
+  const navigate = useNavigate();
+  const theme = useTheme();
+  const colors = tokens(theme.palette.mode);
 
-const styles = {
-  container: { padding: "20px" },
-  header: { display: "flex", justifyContent: "space-between", alignItems: "center", marginBottom: "20px" },
-  searchBox: { padding: "10px", width: "200px", border: "1px solid #ccc", borderRadius: "5px" },
-  buttons: { display: "flex", gap: "10px" },
-  button: { padding: "10px 15px", border: "none", borderRadius: "5px", cursor: "pointer" },
-  export: { backgroundColor: "#3498db", color: "white" },
-  import: { backgroundColor: "#2ecc71", color: "white" },
-  newTicket: { backgroundColor: "#e74c3c", color: "white" },
-  filters: { display: "flex", gap: "10px", marginBottom: "20px" },
-  select: { padding: "10px", border: "1px solid #ccc", borderRadius: "5px" },
-  tableContainer: { overflowX: "auto" },
-  table: { width: "100%", borderCollapse: "collapse" },
-  th: { backgroundColor: "#f4f4f4", padding: "10px", textAlign: "left", borderBottom: "2px solid #ddd",color: "black" },
-  td: { padding: "10px", borderBottom: "1px solid #ddd" },
-};
+  const columns = [
+    { field: "key", headerName: "Key" },
+    { field: "subject", headerName: "Subject", flex: 1, cellClassName: "name-column--cell" },
+    { field: "priority", headerName: "Priority", headerAlign: "left", align: "left" },
+    { 
+      field: "status", 
+      headerName: "Status", 
+      flex: 1,
+      renderCell: (params) => {
+        let color = "";
+        switch (params.value) {
+          case "Pending":
+            color = "red";
+            break;
+          case "Waiting for confirmation":
+            color = "grey"; // You can change this to any suitable color
+            break;
+          case "Processing":
+            color = "#b8860b";
+            break;
+          case "Resolved":
+            color = "green";
+            break;
+          default:
+            color = "black";
+        }
+        return <span style={{ color, fontWeight: "bold" }}>{params.value}</span>;
+      }
+    },
+    { field: "date", headerName: "Date", flex: 1 },
+    { field: "updated", headerName: "Updated", flex: 1 },
+  ];
 
-const TicketTable = () => {
   return (
-    <div style={styles.container}>
-      <Header title="Ticket Management" subtitle="Manage and track your tickets" />
-      <div style={styles.header}>
-        <input type="text" placeholder="Search..." style={styles.searchBox} />
-        <div style={styles.buttons}>
-          <button style={{ ...styles.button, ...styles.export }}><FaFileExport /> EXPORT</button>
-          <button style={{ ...styles.button, ...styles.import }}><FaFileImport /> IMPORT</button>
-          <button style={{ ...styles.button, ...styles.newTicket }}><FaPlus /> New Ticket</button>
-        </div>
-      </div>
-      <div style={styles.filters}>
-        <select style={styles.select}><option>Type</option></select>
-        <select style={styles.select}><option>Category</option></select>
-        <select style={styles.select}><option>Department</option></select>
-        <select style={styles.select}><option>Priority</option></select>
-        <select style={styles.select}><option>Status</option></select>
-        <select style={styles.select}><option>Assign To</option></select>
-      </div>
-      {/* <div style={styles.tableContainer}>
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th style={styles.th}>Key</th>
-              <th style={styles.th}>Subject</th>
-              <th style={styles.th}>Priority</th>
-              <th style={styles.th}>Status</th>
-              <th style={styles.th}>Date</th>
-              <th style={styles.th}>Updated</th>
-            </tr>
-          </thead>
-          <tbody>
-            {ticketsData.map((ticket, index) => (
-              <tr key={index}>
-                <td style={styles.td}>{ticket.key}</td>
-                <td style={styles.td}>{ticket.subject}</td>
-                <td style={styles.td}>{ticket.priority}</td>
-                <td style={styles.td}>{ticket.status}</td>
-                <td style={styles.td}>{ticket.date}</td>
-                <td style={styles.td}>{ticket.updated}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div> */}
-    </div>
+    <Box m="20px">
+      <Header title="Your Experiences" subtitle="List of your experiences" />
+      <Button
+        variant="contained"
+        color="primary"
+        onClick={() => navigate("/crmform")}
+        sx={{
+          backgroundColor: colors.blueAccent[700],
+          color: "#fff",
+          padding: "10px 20px",
+          fontWeight: "bold",
+          whiteSpace: "nowrap",
+          width: { xs: "100%", sm: "auto" },
+          marginLeft: { xs: "0", sm: "auto" },
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          textTransform: "none",
+          "&:hover": {
+            backgroundColor: "#fff",
+            color: "#6870fa",
+          },
+        }}
+      >
+        + Add New Experience
+      </Button>
+
+      <Box
+        m="40px 0 0 0"
+        height="75vh"
+        sx={{
+          "& .MuiDataGrid-root": { border: "none" },
+          "& .MuiDataGrid-cell": { borderBottom: "none" },
+          "& .name-column--cell": { color: colors.greenAccent[300] },
+          "& .MuiDataGrid-columnHeaders": { backgroundColor: colors.blueAccent[700], borderBottom: "none", color: "#fff" },
+          "& .MuiDataGrid-virtualScroller": { backgroundColor: colors.primary[400] },
+          "& .MuiDataGrid-footerContainer": { borderTop: "none", backgroundColor: colors.blueAccent[700] },
+          "& .MuiCheckbox-root": { color: `${colors.greenAccent[200]} !important` },
+          "& .MuiDataGrid-toolbarContainer .MuiButton-text": { color: `${colors.grey[100]} !important` },
+        }}
+      >
+        <Box display="flex" backgroundColor={colors.primary[400]} borderRadius="3px">
+          <InputBase sx={{ ml: 2, flex: 1 }} placeholder="Search" />
+          <IconButton type="button" sx={{ p: 1 }}>
+            <SearchIcon />
+          </IconButton>
+        </Box>
+
+        <DataGrid rows={mockDataContacts} columns={columns} components={{ Toolbar: GridToolbar }} />
+      </Box>
+    </Box>
   );
 };
 
-export default TicketTable;
+export default Crm;

@@ -5,10 +5,6 @@ import { Link, useLocation } from "react-router-dom";
 import "react-pro-sidebar/dist/css/styles.css";
 import { tokens } from "../../theme";
 import HomeOutlinedIcon from "@mui/icons-material/HomeOutlined";
-// import CalendarTodayOutlinedIcon from "@mui/icons-material/CalendarTodayOutlined";
-// import PeopleAltOutlinedIcon from "@mui/icons-material/PeopleAltOutlined";
-// import HandshakeOutlinedIcon from "@mui/icons-material/HandshakeOutlined";
-// import BusinessOutlinedIcon from "@mui/icons-material/BusinessOutlined";
 import LogoutOutlinedIcon from "@mui/icons-material/LogoutOutlined";
 import WorkOutlineOutlinedIcon from "@mui/icons-material/WorkOutlineOutlined";
 import logoLight from "./logo.png";
@@ -28,7 +24,7 @@ const Item = ({ title, to, icon, selected, setSelected }) => {
       }}
       onClick={() => {
         setSelected(to);
-        sessionStorage.setItem("selectedSidebarItem", to); // Changed to sessionStorage
+        localStorage.setItem("selectedSidebarItem", to);
       }}
       icon={<Box sx={{ display: "flex", alignItems: "center", background: "none" }}>{icon}</Box>}
     >
@@ -44,32 +40,46 @@ const Sidebar = ({ isSidebar }) => {
   const isMobile = useMediaQuery("(max-width: 900px)");
   const location = useLocation();
   const [selected, setSelected] = useState(location.pathname);
+  // const [isCollapsed, setIsCollapsed] = useState(false);
+
 
   useEffect(() => {
-    // Sync the selected state with the current route path
-    setSelected(location.pathname);
-    sessionStorage.setItem("selectedSidebarItem", location.pathname);
-  }, [location.pathname]); // Trigger effect when route changes
+    const storedItem = localStorage.getItem("selectedSidebarItem");
+    if (storedItem) {
+      setSelected(storedItem);
+    }
+  }, [location.pathname]);
 
   const logoSrc = theme.palette.mode === "dark" ? logoDark : logoLight;
 
   return (
-    <Box
+      <Box
       sx={{
         position: isMobile ? "absolute" : "fixed",
         left: 0,
         top: 0,
-        width: "270px",
+        width: "270px", // Removed isCollapsed check
         height: "100vh",
         background: colors.primary[400],
         display: "flex",
         flexDirection: "column",
         zIndex: isMobile ? 1300 : 1,
-        "& .pro-sidebar-inner": { background: `${colors.primary[400]} !important` },
-        "& .pro-icon-wrapper": { backgroundColor: "transparent !important" },
-        "& .pro-inner-item": { padding: "5px 35px 5px 20px !important" },
-        "& .pro-inner-item:hover": { color: "#868dfb !important" },
-        "& .pro-menu-item.active": { color: "#fff !important" },
+
+        "& .pro-sidebar-inner": {
+          background: `${colors.primary[400]} !important`,
+        },
+        "& .pro-icon-wrapper": {
+          backgroundColor: "transparent !important",
+        },
+        "& .pro-inner-item": {
+          padding: "5px 35px 5px 20px !important",
+        },
+        "& .pro-inner-item:hover": {
+          color: "#868dfb !important",
+        },
+        "& .pro-menu-item.active": {
+          color: "#fff !important",
+        },
       }}
     >
       <Box alignItems="center" sx={{ width: "100%", padding: "20px" }}>
